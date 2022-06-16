@@ -26,7 +26,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
             }
         });
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -87,5 +92,16 @@ public class MainActivity extends AppCompatActivity {
                     R.string.empty_not_saved,
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void onClick(View v) {
+        TextView txtView = (TextView) v;
+        String txtContent = txtView.getText().toString();
+        Word word = new Word(txtContent);
+        mWordViewModel.delete(word);
+        Toast.makeText(
+                getApplicationContext(),
+                txtContent + " has been deleted",
+                Toast.LENGTH_LONG).show();
     }
 }

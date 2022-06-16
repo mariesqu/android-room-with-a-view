@@ -29,8 +29,8 @@ import java.util.List;
 
 class WordRepository {
 
-    private WordDao mWordDao;
-    private LiveData<List<Word>> mAllWords;
+    private final WordDao mWordDao;
+    private final LiveData<List<Word>> mAllWords;
 
     // Note that in order to unit test the WordRepository, you have to remove the Application
     // dependency. This adds complexity and much more code, and this sample is not about testing.
@@ -57,7 +57,7 @@ class WordRepository {
 
     private static class insertAsyncTask extends AsyncTask<Word, Void, Void> {
 
-        private WordDao mAsyncTaskDao;
+        private final WordDao mAsyncTaskDao;
 
         insertAsyncTask(WordDao dao) {
             mAsyncTaskDao = dao;
@@ -66,6 +66,25 @@ class WordRepository {
         @Override
         protected Void doInBackground(final Word... params) {
             mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
+    void delete(Word word) {
+        new deleteAsyncTask(mWordDao).execute(word);
+    }
+
+    private static class deleteAsyncTask extends AsyncTask<Word, Void, Void> {
+
+        private final WordDao mAsyncTaskDao;
+
+        deleteAsyncTask(WordDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Word... params) {
+            mAsyncTaskDao.delete(params[0]);
             return null;
         }
     }
