@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Word word = new Word(data.getStringExtra(NewWordActivity.EXTRA_REPLY), null);
+                Word word = new Word(data.getStringExtra(NewWordActivity.EXTRA_REPLY), data.getStringExtra(NewWordActivity.EXTRA_REPLY), null);
                 mWordViewModel.insert(word);
             } else {
                 Toast.makeText(
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             if (resultCode == RESULT_OK) {
-                Word word = new Word(data.getStringExtra(EditWordActivity.EXTRA_REPLY), null);
+                Word word = new Word(deleteTxtView.getText().toString(), data.getStringExtra(EditWordActivity.EXTRA_REPLY), null);
                 mWordViewModel.update(word);
             } else {
                 Toast.makeText(
@@ -122,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(MainActivity.this, EditWordActivity.class);
+                Bundle extras = new Bundle();
+                extras.putString("wordData", deleteTxtView.getText().toString());
+                intent.putExtras(extras);
                 startActivityForResult(intent, 2);
             }
         });
@@ -137,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String txtContent = deleteTxtView.getText().toString();
-                        Word word = new Word(txtContent, null);
+                        Word word = new Word(txtContent, txtContent, null);
                         mWordViewModel.delete(word);
                         Toast.makeText(
                                 getApplicationContext(),

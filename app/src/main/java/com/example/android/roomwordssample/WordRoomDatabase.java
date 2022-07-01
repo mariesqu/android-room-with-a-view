@@ -92,9 +92,9 @@ public abstract class WordRoomDatabase extends RoomDatabase {
             // Not needed if you only populate on creation.
             mDao.deleteAll();
 
-            Word word = new Word("Hello", null);
+            Word word = new Word("Hello", "Hello", null);
             mDao.insert(word);
-            word = new Word("World", null);
+            word = new Word("World", "World", null);
             mDao.insert(word);
             return null;
         }

@@ -20,6 +20,9 @@ public class EditWordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_word);
         mEditWordView = findViewById(R.id.edit_word);
 
+        Bundle extras = getIntent().getExtras();
+        mEditWordView.setText(extras.getString("wordData"));
+
         final Button button = findViewById(R.id.button_save);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

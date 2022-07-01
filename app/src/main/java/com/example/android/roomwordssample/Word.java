@@ -37,15 +37,25 @@ public class Word {
 
     @PrimaryKey
     @NonNull
+    @ColumnInfo(name = "id")
+    private final String mId;
+
+    @NonNull
     @ColumnInfo(name = "word")
     private final String mWord;
 
     @ColumnInfo(name = "image")
     private final byte[] mImage;
 
-    public Word(@NonNull String word, byte[] image) {
+    public Word(@NonNull String id, @NonNull String word, byte[] image) {
+        this.mId = id;
         this.mWord = word;
         this.mImage = image;
+    }
+
+    @NonNull
+    public String getId() {
+        return this.mId;
     }
 
     @NonNull
