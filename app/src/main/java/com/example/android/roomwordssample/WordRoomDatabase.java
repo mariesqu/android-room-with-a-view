@@ -20,8 +20,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+
 import android.content.Context;
 import android.os.AsyncTask;
+
 import androidx.annotation.NonNull;
 
 /**
@@ -42,7 +44,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
             synchronized (WordRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            WordRoomDatabase.class, "word_database")
+                                    WordRoomDatabase.class, "word_database")
                             // Wipes and rebuilds instead of migrating if no Migration object.
                             // Migration is not part of this codelab.
                             .fallbackToDestructiveMigration()
@@ -57,7 +59,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
     /**
      * Override the onOpen method to populate the database.
      * For this sample, we clear the database every time it is created or opened.
-     *
+     * <p>
      * If you want to populate the database only when the database is created for the 1st time,
      * override RoomDatabase.Callback()#onCreate
      */
@@ -90,9 +92,9 @@ public abstract class WordRoomDatabase extends RoomDatabase {
             // Not needed if you only populate on creation.
             mDao.deleteAll();
 
-            Word word = new Word("Hello");
+            Word word = new Word("Hello", null);
             mDao.insert(word);
-            word = new Word("World");
+            word = new Word("World", null);
             mDao.insert(word);
             return null;
         }

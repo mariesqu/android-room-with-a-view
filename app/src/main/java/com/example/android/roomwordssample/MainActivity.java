@@ -18,10 +18,16 @@ package com.example.android.roomwordssample;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
 
     private WordViewModel mWordViewModel;
+    TextView deleteTxtView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,26 +89,74 @@ public class MainActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Word word = new Word(data.getStringExtra(NewWordActivity.EXTRA_REPLY));
-            mWordViewModel.insert(word);
+        if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Word word = new Word(data.getStringExtra(NewWordActivity.EXTRA_REPLY), null);
+                mWordViewModel.insert(word);
+            } else {
+                Toast.makeText(
+                        getApplicationContext(),
+                        R.string.empty_not_saved,
+                        Toast.LENGTH_LONG).show();
+            }
         } else {
-            Toast.makeText(
-                    getApplicationContext(),
-                    R.string.empty_not_saved,
-                    Toast.LENGTH_LONG).show();
+            if (resultCode == RESULT_OK) {
+                Word word = new Word(data.getStringExtra(EditWordActivity.EXTRA_REPLY), null);
+                mWordViewModel.update(word);
+            } else {
+                Toast.makeText(
+                        getApplicationContext(),
+                        R.string.empty_not_saved,
+                        Toast.LENGTH_LONG).show();
+            }
         }
     }
 
     public void onClick(View v) {
-        TextView txtView = (TextView) v;
-        String txtContent = txtView.getText().toString();
-        Word word = new Word(txtContent);
-        mWordViewModel.delete(word);
-        Toast.makeText(
-                getApplicationContext(),
-                txtContent + " has been deleted",
-                Toast.LENGTH_LONG).show();
+        deleteTxtView = (TextView) v;
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        builder.setTitle("Edit Word");
+        builder.setMessage("Do you want to edit?");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(MainActivity.this, EditWordActivity.class);
+                startActivityForResult(intent, 2);
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(v.getContext());
+                builder2.setTitle("Delete Word");
+                builder2.setMessage("Do you want to delete?");
+
+                builder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String txtContent = deleteTxtView.getText().toString();
+                        Word word = new Word(txtContent, null);
+                        mWordViewModel.delete(word);
+                        Toast.makeText(
+                                getApplicationContext(),
+                                txtContent + " has been deleted",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                builder2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                AlertDialog alert = builder2.create();
+                alert.show();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

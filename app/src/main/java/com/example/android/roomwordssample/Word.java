@@ -27,7 +27,7 @@ import androidx.annotation.NonNull;
  * @ Entity - You must annotate the class as an entity and supply a table name if not class name.
  * @ PrimaryKey - You must identify the primary key.
  * @ ColumnInfo - You must supply the column name if it is different from the variable name.
- *
+ * <p>
  * See the documentation for the full rich set of annotations.
  * https://developer.android.com/topic/libraries/architecture/room.html
  */
@@ -40,12 +40,20 @@ public class Word {
     @ColumnInfo(name = "word")
     private final String mWord;
 
-    public Word(@NonNull String word) {
+    @ColumnInfo(name = "image")
+    private final byte[] mImage;
+
+    public Word(@NonNull String word, byte[] image) {
         this.mWord = word;
+        this.mImage = image;
     }
 
     @NonNull
     public String getWord() {
         return this.mWord;
+    }
+
+    public byte[] getImage() {
+        return this.mImage;
     }
 }
