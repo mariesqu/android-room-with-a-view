@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Word word = new Word(data.getStringExtra(NewWordActivity.EXTRA_REPLY), data.getStringExtra(NewWordActivity.EXTRA_REPLY), null);
+                Word word = new Word(data.getStringExtra(NewWordActivity.EXTRA_REPLY), data.getStringExtra(NewWordActivity.EXTRA_REPLY), data.getByteArrayExtra("imageData"));
                 mWordViewModel.insert(word);
             } else {
                 Toast.makeText(
